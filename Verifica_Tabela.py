@@ -1,20 +1,27 @@
-import sqlite3 as con 
+import sqlite3 
 
+
+con = sqlite3.connect('hortifruti.db')
+     
 try:
-    conecta = con.connect('hortifruti.db')
-    cursor = conecta.cursor()
-
     #verifica se as tabelas foram criadas
-    res = cursor.execute('SELECT name FROM sqlite_master WHERE type="table" AND name="cliente"')
-    res = cursor.execute('SELECT name FROM sqlite_master WHERE type="table" AND name="funcionario"')
-    res = cursor.execute('SELECT name FROM sqlite_master WHERE type="table" AND name="estoque"')
-    res = cursor.execute('SELECT name FROM sqlite_master WHERE type="table" AND name="venda"')
-    res = cursor.execute('SELECT name FROM sqlite_master WHERE type="table" AND name="nfc"')
-    print(res.fetchall())
-except con.DatabaseError as erro:
-      print("Erro no banco de dados", erro)
+    cursor= con.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    tables = cursor.fetchall()
+    
+    # verica se as tabelas estão no bd
+    expected_tables = ['cliente', 'funcionario', 'produto', 'estoque', 'venda', 'nfc']
+    for table in expected_tables:
+        if table not in [t[0] for t in tables]:
+            print(f'Tabela {table} criada com sucesso!')
+        else:
+            print(f'Tabela {table} criada com sucesso!')
+    
+except sqlite3.Error as erro:
+     print(f"Erro no banco de dados", {erro})
+
 finally:
-    if conecta:
-     conecta.close()
+    if con:
+     con.close()
 
 #Sqlite_master é uma tabela mestra do sqlite contendo informações das tabelas dos bancos de dados
