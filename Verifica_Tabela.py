@@ -12,7 +12,7 @@ try:
     # verica se as tabelas estão no bd
     #expected_tables define chamada de lista que contém os nomes das tabelas
     #que  devem estar no banco de dados
-    expected_tables = ['cliente', 'funcionario', 'produto', 'estoque', 'venda', 'nfc']
+    expected_tables = ['cliente', 'funcionario', 'fornecedor', 'produto', 'estoque', 'venda', 'nfc']
     for table in expected_tables:
          #inicia loop de iteração para cada tabela na lista expected table
         if table not in [t[0] for t in tables]:
