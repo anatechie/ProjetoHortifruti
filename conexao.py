@@ -1,4 +1,7 @@
-import sqlite3 
+
+
+
+'''import sqlite3 
 
 
 con = sqlite3.connect('hortifruti.db')
@@ -32,3 +35,34 @@ finally:
 
 #Sqlite_master é uma tabela mestra do sqlite contendo informações das tabelas dos bancos de dados
 
+'''
+
+import sqlite3
+from rich.console import Console
+
+console = Console()
+
+def criar_conexao():
+    return sqlite3.connect('hortifruti.db')
+
+def verificar_tabelas():
+    con = criar_conexao()
+    try:
+        cursor = con.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = cursor.fetchall()
+        
+        expected_tables = ['cliente', 'funcionario', 'fornecedor', 'produto', 'estoque', 'venda', 'nfc']
+        for table in expected_tables:
+            if table not in [t[0] for t in tables]:
+                console.print(f'[bold red]Tabela {table} não existe e precisa ser criada.[/bold red]')
+            else:
+                console.print(f'[bold green]Tabela {table} já existe![/bold green]')
+    except sqlite3.Error as erro:
+        console.print(f"[bold red]Erro no banco de dados: {erro}[/bold red]")
+    finally:
+        if con:
+            con.close()
+
+# Exemplo de uso
+verificar_tabelas()
